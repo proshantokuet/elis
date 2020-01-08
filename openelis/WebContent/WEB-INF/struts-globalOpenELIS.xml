@@ -1553,6 +1553,9 @@
         <action path="/rest/**" name="WebServiceForm" type="us.mn.state.health.lims.ws.ResourceRetrieveAction" validate="false">
             <forward name="success" path="success"/>
         </action>
+        <action path="/rest/payment" name="WebServiceForm" type="us.mn.state.health.lims.ws.PaymentResourceRetrieveAction" validate="false">
+            <forward name="success" path="success"/>
+        </action>
 
         <action path="/rest/scheduledTasks" name="WebServiceForm" type="us.mn.state.health.lims.ws.TasksMonitoringAction" validate="false">
             <forward name="success" path="success"/>

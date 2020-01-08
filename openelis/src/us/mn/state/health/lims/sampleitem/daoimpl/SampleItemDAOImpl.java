@@ -18,7 +18,10 @@
 package us.mn.state.health.lims.sampleitem.daoimpl;
 
 import java.awt.print.Paper;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -27,6 +30,7 @@ import java.util.Set;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 
@@ -386,6 +390,50 @@ public class SampleItemDAOImpl extends BaseDAOImpl implements SampleItemDAO {
 		return null;
 	}
 	
+	public String getSampleItemIdByPatient(String patientId,String panels){
+		String msg ="success";
+		String hql = "select si.id si_id from patient_identity pi "
+				+ " join patient p on pi.patient_id = p.id join sample_human sh "
+				+ " on p.id = sh.patient_id join sample_item  si on sh.samp_id = si.samp_id "
+				+ " where pi.identity_data = '"+patientId+"' order by si.id desc limit 1 ";	
+		
+		
+		try {
+			Query query = HibernateUtil.getSession().createSQLQuery(hql);	
+		
+			List<BigDecimal> sampleId = new ArrayList<BigDecimal>();
+			sampleId = query.list();
+			int samId = 0; 
+			for (BigDecimal bigInteger : sampleId) {
+				samId = sampleId.get(0).intValue();
+				
+			}					
+			String[] elements = panels.split(",");	
+			String ss = "";
+			for (String string : elements) {
+				 System.err.println('\''+ string + '\'');
+				 ss = ss+'\''+ string + '\''+",";
+				 
+			}
+			ss =  ss.replaceAll(",$", "");
+			
+			String sqlAll = "update analysis set paid = false where sampitem_id ="+samId;
+			HibernateUtil.getSession().createSQLQuery(sqlAll)					
+			.executeUpdate();
+			String sql = "update analysis set paid = true where sampitem_id ="+samId+" and panel_id "
+					+ " in (SELECT id FROM panel where name in ("+ss+")) "	;
+			
+			HibernateUtil.getSession().createSQLQuery(sql)					
+					.executeUpdate();
+			}catch(Exception e){
+				msg= "error";
+				e.printStackTrace();
+			}finally{
+				closeSession();
+			}
+		
+		return msg;
+	}
 	public String getSampleItem(String id){
 		List<SampleItem> list =getSampleItemsBySampleIdWithNoStatus(id);
 		Map<String,String> pay = new HashMap<>();
@@ -409,17 +457,34 @@ public class SampleItemDAOImpl extends BaseDAOImpl implements SampleItemDAO {
 	 public class Paid {
 	    	private int id;
 	    	private String status;
+	    	private String sid;
 	    	
 	    	 public Paid(int id, String status) {            
 	             this.id = id;
 	             this.status = status;
 	         }
+	    	 public void setId(int id) {
+	             this.id = id;
+	             
+	         }
 	    	 public int getId() {
 	             return id;
 	         }
 
+	    	 public void setStatus(String status ) {
+	             this.status = status;
+	         }
+	    	 
 	         public String getStatus() {
 	             return status;
+	         }
+	         
+	         public void setSid(String sid) {
+	             this.sid = sid;
+	         }
+	         
+	         public String getSid() {
+	             return sid;
 	         }
 
 	        
