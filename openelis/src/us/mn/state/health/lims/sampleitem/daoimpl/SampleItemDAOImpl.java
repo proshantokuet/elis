@@ -417,9 +417,9 @@ public class SampleItemDAOImpl extends BaseDAOImpl implements SampleItemDAO {
 			}
 			ss =  ss.replaceAll(",$", "");
 			
-			String sqlAll = "update analysis set paid = false where sampitem_id ="+samId;
+			/*String sqlAll = "update analysis set paid = false where sampitem_id ="+samId;
 			HibernateUtil.getSession().createSQLQuery(sqlAll)					
-			.executeUpdate();
+			.executeUpdate();*/
 			String sql = "update analysis set paid = true where sampitem_id ="+samId+" and panel_id "
 					+ " in (SELECT id FROM panel where name in ("+ss+")) "	;
 			
