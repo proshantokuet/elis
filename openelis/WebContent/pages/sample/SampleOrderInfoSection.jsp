@@ -211,7 +211,7 @@
 <%  if (useProviderInfo) { %>
 <% if(supportfirstNameFirst) { %>
 <tr>
-    <td class="firstNameLabel">
+    <!-- <td class="firstNameLabel">
     <bean:message key="sample.entry.provider.fullName"/>:
     </td>
     <td>
@@ -224,7 +224,7 @@
                     allowEdits="true"
                     />
         </html:select>
-    </td>
+    </td> -->
     <%--<td class="firstNameLabel">--%>
         <%--<bean:message key="sample.entry.provider.firstName"/>:--%>
     <%--</td>--%>

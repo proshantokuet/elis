@@ -34,7 +34,7 @@ public class MenuDAOImpl implements MenuDAO {
 	public List<Menu> getAllMenus() throws LIMSRuntimeException {
 
 		try {
-			String sql = "from Menu";
+			String sql = "from Menu where id not in(108,109,110)";
 			Query query = HibernateUtil.getSession().createQuery(sql);
 			List<Menu> menus = query.list();
 			HibernateUtil.getSession().flush();

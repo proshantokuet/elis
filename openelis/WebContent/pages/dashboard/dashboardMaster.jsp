@@ -82,14 +82,10 @@ basePath = path + "/";
                     <span><bean:message key="dashboard.todayStatus.total"/></span>
                     <span id="totalSamplesCount"></span>
                 </td>
-                <td>
-                    <span><bean:message key="dashboard.todayStatus.awaitingTesting"/></span>
-                    <span id="awaitingTestCount"></span>
-                </td>
-                <td style="<% if (!alwaysValidate) { %> display:none <% } %>">
+                <!-- <td style="<% if (!alwaysValidate) { %> display:none <% } %>">
                     <span><bean:message key="dashboard.todayStatus.awaitingValidation"/></span>
                     <span id="awaitingValidationCount"></span>
-                </td>
+                </td> -->
                 <td>
                     <span><bean:message key="dashboard.todayStatus.Completed"/></span>
                     <span id="completedTestCount"></span>

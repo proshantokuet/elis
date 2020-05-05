@@ -452,7 +452,9 @@ function insertPanelIntoPanelTable( panel, panelTable ){
     
 	selectionCell.innerHTML = getPanelCheckBoxesHtml(testMap, nominalRow, id );
 	
-	nameCell.innerHTML = "<label for='panel_" + nominalRow + "'> " + name + "   "+isPaid(id) + "</label>";
+	nameCell.innerHTML = "<label " +colorLabel(id) + "for='panel_" + nominalRow + "'> " + name + "   "+isPaid(id) +"</label>";
+
+
 }
 function isPaid(id){
 	var paidPanel = $jq("#pay").val();
@@ -462,11 +464,26 @@ function isPaid(id){
 	paidArray.forEach(function(entry) {	    
 	    if(entry==id){
 	    	console.log(entry +" :"+ id);
-	    	paymentStatus = "<b>Paid</b>";	    	
+	    	paymentStatus = "<b>(Paid)</b>";	    	
 	    } 
 	});
 	
 	return paymentStatus;
+}
+
+function colorLabel(id){
+	var paidPanel = $jq("#pay").val();
+	var paidArray = paidPanel.split(",");
+	var colorLabelString = "";
+	console.log(paidArray);
+	paidArray.forEach(function(entry) {	    
+	    if(entry==id){
+	    	console.log(entry +" :"+ id);
+	    	colorLabelString = "style='color: green;'";	    	
+	    } 
+	});
+	
+	return colorLabelString;
 }
 
 function getCheckBoxesHtml( row, userBench){
