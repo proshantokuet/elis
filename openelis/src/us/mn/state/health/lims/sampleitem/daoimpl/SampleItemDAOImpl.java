@@ -395,7 +395,7 @@ public class SampleItemDAOImpl extends BaseDAOImpl implements SampleItemDAO {
 		String hql = "select si.id si_id from patient_identity pi "
 				+ " join patient p on pi.patient_id = p.id join sample_human sh "
 				+ " on p.id = sh.patient_id join sample_item  si on sh.samp_id = si.samp_id "
-				+ " where pi.identity_data = '"+patientId+"' order by si.id desc limit 1 ";	
+				+ " where pi.identity_data = '"+patientId+"' and Date(si.lastupdated) = Date(now ()) order by si.id desc";	
 		
 		
 		try {
@@ -404,27 +404,53 @@ public class SampleItemDAOImpl extends BaseDAOImpl implements SampleItemDAO {
 			List<BigDecimal> sampleId = new ArrayList<BigDecimal>();
 			sampleId = query.list();
 			int samId = 0; 
-			for (BigDecimal bigInteger : sampleId) {
-				samId = sampleId.get(0).intValue();
+			for (int i = 0; i < sampleId.size(); i++) {
+				samId = sampleId.get(i).intValue();
+				String[] elements = panels.split(",");	
+				String ss = "";
+				for (String string : elements) {
+					 System.err.println('\''+ string + '\'');
+					 ss = ss+'\''+ string + '\''+",";
+					 
+				}
+				ss =  ss.replaceAll(",$", "");
 				
-			}					
-			String[] elements = panels.split(",");	
-			String ss = "";
-			for (String string : elements) {
-				 System.err.println('\''+ string + '\'');
-				 ss = ss+'\''+ string + '\''+",";
-				 
+				/*String sqlAll = "update analysis set paid = false where sampitem_id ="+samId;
+				HibernateUtil.getSession().createSQLQuery(sqlAll)					
+				.executeUpdate();*/
+				String SqlUpdateTest = "update analysis set paid = true where sampitem_id ="+samId+" and test_id "
+						+ " in (SELECT id FROM test where name in ("+ss+")) "	;
+				
+				String sql = "update analysis set paid = true where sampitem_id ="+samId+" and panel_id "
+						+ " in (SELECT id FROM panel where name in ("+ss+")) "	;
+				
+				HibernateUtil.getSession().createSQLQuery(sql)					
+						.executeUpdate();
+				HibernateUtil.getSession().createSQLQuery(SqlUpdateTest)					
+				.executeUpdate();
 			}
-			ss =  ss.replaceAll(",$", "");
-			
-			/*String sqlAll = "update analysis set paid = false where sampitem_id ="+samId;
-			HibernateUtil.getSession().createSQLQuery(sqlAll)					
-			.executeUpdate();*/
-			String sql = "update analysis set paid = true where sampitem_id ="+samId+" and panel_id "
-					+ " in (SELECT id FROM panel where name in ("+ss+")) "	;
-			
-			HibernateUtil.getSession().createSQLQuery(sql)					
-					.executeUpdate();
+//			for  (BigDecimal bigInteger : sampleId) {
+//				samId = sampleId.get(0).intValue();
+//				String[] elements = panels.split(",");	
+//				String ss = "";
+//				for (String string : elements) {
+//					 System.err.println('\''+ string + '\'');
+//					 ss = ss+'\''+ string + '\''+",";
+//					 
+//				}
+//				ss =  ss.replaceAll(",$", "");
+//				
+//				/*String sqlAll = "update analysis set paid = false where sampitem_id ="+samId;
+//				HibernateUtil.getSession().createSQLQuery(sqlAll)					
+//				.executeUpdate();*/
+//				String sql = "update analysis set paid = true where sampitem_id ="+samId+" and panel_id "
+//						+ " in (SELECT id FROM panel where name in ("+ss+")) "	;
+//				
+//				HibernateUtil.getSession().createSQLQuery(sql)					
+//						.executeUpdate();
+//				
+//			}					
+
 			}catch(Exception e){
 				msg= "error";
 				e.printStackTrace();
@@ -440,9 +466,33 @@ public class SampleItemDAOImpl extends BaseDAOImpl implements SampleItemDAO {
 		String result = "";
 		for (SampleItem sampleItem : list) {
 			Set<Analysis> analysis = sampleItem.getAnalyses();
-			for (Analysis analysis2 : analysis) {	
-				if(analysis2.getPaid()){
-					pay.put(analysis2.getPanel().getId(), analysis2.getComment());
+			for (Analysis analysis2 : analysis) {
+				if(analysis2.getPanel() != null) {
+					if(analysis2.getPaid()){
+						pay.put(analysis2.getPanel().getId(), analysis2.getComment());
+					}
+				}
+			}
+		
+		}
+		for (Map.Entry<String, String> entry : pay.entrySet()) {
+			result = result+entry.getKey()+",";
+		}
+		//return result.replaceAll(",$", "");
+		return result;
+	}
+	
+	public String getSampleItemForTest(String id){
+		List<SampleItem> list =getSampleItemsBySampleIdWithNoStatus(id);
+		Map<String,String> pay = new HashMap<>();
+		String result = "";
+		for (SampleItem sampleItem : list) {
+			Set<Analysis> analysis = sampleItem.getAnalyses();
+			for (Analysis analysis2 : analysis) {
+				if(analysis2.getPanel() == null) {
+					if(analysis2.getPaid()){
+						pay.put(analysis2.getTest().getId(), analysis2.getComment());
+					}
 				}
 			}
 		

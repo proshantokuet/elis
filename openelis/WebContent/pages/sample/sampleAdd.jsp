@@ -36,6 +36,7 @@
 	useCollector = FormFields.getInstance().useField(Field.SampleEntrySampleCollector);
 	sampleId = request.getParameter("id");
 	String payment = new SampleItemDAOImpl().getSampleItem(sampleId);
+	String paymentOfTest = new SampleItemDAOImpl().getSampleItemForTest(sampleId);
 %>
 
 <script type="text/javascript" src="<%=basePath%>scripts/utilities.jsp"></script>
@@ -420,6 +421,7 @@ function insertTestIntoTestTable( test, testTable ){
 	//nameCell.innerHTML = getTestDisplayRowHtml( name, id, nominalRow );
 selectionCell.html(getCheckBoxesHtml( nominalRow, userBench ));
 nameCell.html(getTestDisplayRowHtml( name, id, nominalRow ));
+nameCell.innerHTML = "<label " + "for='test_" + nominalRow + "'> " + name + "   "+"ok" +"</label>";
 
 	/*if( userBench ){
 		$("sectionHead").show();
@@ -453,8 +455,6 @@ function insertPanelIntoPanelTable( panel, panelTable ){
 	selectionCell.innerHTML = getPanelCheckBoxesHtml(testMap, nominalRow, id );
 	
 	nameCell.innerHTML = "<label " +colorLabel(id) + "for='panel_" + nominalRow + "'> " + name + "   "+isPaid(id) +"</label>";
-
-
 }
 function isPaid(id){
 	var paidPanel = $jq("#pay").val();
@@ -496,10 +496,39 @@ function getPanelCheckBoxesHtml(map, row, id ){
 }
 
 function getTestDisplayRowHtml( name, id, row ){
-	return "<label for='test_" + row + "'>" + name + "</label>" + "<input name='testName' value='" + id + "' id='testName_" + row  + "' type='hidden' style='display:none'>";
+	return "<label " +colorLabelTest(id)+ "for='test_" + row + "'>" + name + isTestPaid(id) + "</label>" + "<input name='testName' value='" + id + "' id='testName_" + row  + "' type='hidden' style='display:none'>";
 }
 
 
+function isTestPaid(id){
+	var paidPanel = $jq("#paytest").val();
+	var paidArray = paidPanel.split(",");
+	var paymentStatus = "";
+	console.log(paidArray);
+	paidArray.forEach(function(entry) {	    
+	    if(entry==id){
+	    	console.log(entry +" :"+ id);
+	    	paymentStatus = "<b>(Paid)</b>";	    	
+	    } 
+	});
+	
+	return paymentStatus;
+}
+
+function colorLabelTest(id){
+	var paidPanel = $jq("#paytest").val();
+	var paidArray = paidPanel.split(",");
+	var colorLabelString = "";
+	console.log(paidArray);
+	paidArray.forEach(function(entry) {	    
+	    if(entry==id){
+	    	console.log(entry +" :"+ id);
+	    	colorLabelString = "style='color: green;'";	    	
+	    } 
+	});
+	
+	return colorLabelString;
+}
 
 function processGetTestFailure(xhr){
   // alert(xhr.responseText);
@@ -708,6 +737,8 @@ function samplesHaveBeenAdded(){
  --%>
  
  <input type="hidden" value="<%=payment %>" name="pay" id="pay"/>
+
+  <input type="hidden" value="<%=paymentOfTest %>" name="paytest" id="paytest"/>
  
  <div><%=payment %></div>
 <html:hidden name="<%=formName%>" property="sampleXML" styleId="sampleXML"/>
