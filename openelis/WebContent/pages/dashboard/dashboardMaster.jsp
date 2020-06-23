@@ -182,7 +182,7 @@ basePath = path + "/";
 
         var isToday = function(date) {
             // ISO date format
-            var clientNow = new Date('<%= serverNow %>');
+            var clientNow = new Date();
             return clientNow.getDate() === date.getDate() && clientNow.getMonth() == date.getMonth() && clientNow.getFullYear() === date.getFullYear();
         };
 

@@ -421,7 +421,6 @@ function insertTestIntoTestTable( test, testTable ){
 	//nameCell.innerHTML = getTestDisplayRowHtml( name, id, nominalRow );
 selectionCell.html(getCheckBoxesHtml( nominalRow, userBench ));
 nameCell.html(getTestDisplayRowHtml( name, id, nominalRow ));
-nameCell.innerHTML = "<label " + "for='test_" + nominalRow + "'> " + name + "   "+"ok" +"</label>";
 
 	/*if( userBench ){
 		$("sectionHead").show();
