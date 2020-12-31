@@ -11,7 +11,8 @@
 <table width="95%">
 <tr><td colspan="4">&nbsp;</td>
 <tr>
-    <td width="20%">&nbsp;</td>	
+    <td width="10%">&nbsp;</td>
+    <td width="23%">&nbsp;</td>	
     <td width="110" noWrap>&nbsp;</td>
     <td colspan="2" align="left">
         <%--bugzilla 2376--%>

@@ -41,11 +41,11 @@ function submitOnClick(button){
     <td width="50%" valign="top">
         <table width="95%">
         <tr>
+	    <td width="20%">&nbsp;</td>
             <td width="20%">&nbsp;</td>
-            <td colspan="2">
-                <bean:message key="login.notice.message"/>
-            </td>
+            <td width="20%"><img src="images/logo-surjerhashi.png" title="OpenELIS" alt="OpenELIS"></td>
             <td width="20%">&nbsp;</td>
+	    <td width="10%">&nbsp;</td>
         </tr>
         <tr>
             <td width="20%">&nbsp;<br/><br/></td>
@@ -56,8 +56,9 @@ function submitOnClick(button){
         </tr>
         </table>
         <br>
-        <table width="95%">
+        <table width="90%">
         <tr>
+            <td width="20%">&nbsp;</td>
             <td width="20%">&nbsp;</td>
             <td width="10%" noWrap><bean:message key="login.msg.userName"/>:</td>
             <td colspan="2" align="left">
@@ -66,7 +67,8 @@ function submitOnClick(button){
             </td>
         </tr>
         <tr>
-            <td width="20%">&nbsp;</td>
+            <td width="10%">&nbsp;</td>
+            <td width="10%">&nbsp;</td>
             <td width="10%" noWrap><bean:message key="login.msg.password"/>:</td>
             <td colspan="2" align="left">
                 <%--bugzilla 2173, 2376--%>
