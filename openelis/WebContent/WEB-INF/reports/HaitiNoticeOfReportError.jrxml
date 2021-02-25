@@ -25,7 +25,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="20" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Il n’est pas possible à créer ce rapport à ce temps.]]></text>
+				<text><![CDATA[It is not possible to create this report at this time.]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
